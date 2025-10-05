@@ -1,0 +1,34 @@
+Name: CI pipeline
+
+on:
+  push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+     
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - uses: iterative/setup-cml@v2
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirement.txt
+
+      - name: run main file
+        run: python main.py
+
+      - name: cml reporting
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "he is your report" >> report.md
+          cml comment create report.md
+
+
+
+
+
